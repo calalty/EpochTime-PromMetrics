@@ -14,30 +14,18 @@ let clientEpoch = {
     epoch: clientTimestamp
 }
 
-let xmlHttp = new XMLHttpRequest();
-let serverDate = new Date(xmlHttp);
-let serverTimestamp = epochConverter(serverDate)
-let serverEpoch = {
-    epoch: serverTimestamp
-}
-
 setInterval(() => {
     clientDate = new Date()
     clientTimestamp = epochConverter(clientDate)
     clientEpoch = {
         epoch: clientTimestamp
     }
-    serverDate = new Date(xmlHttp);
-    serverTimestamp = epochConverter(serverDate)
-    serverEpoch = {
-        epoch: serverTimestamp
-    }
 }, 30000);
 
 router.get('/',
     function (req, res, next) {
-        if (ajv.validate(timeSchema, clientEpoch, serverEpoch)) {
-            res.status(200).send([clientEpoch, serverEpoch])
+        if (ajv.validate(timeSchema, clientEpoch)) {
+            res.status(200).send(clientEpoch)
         } else {
             res.status(500).send('Error: Not an epoch number')
         }
